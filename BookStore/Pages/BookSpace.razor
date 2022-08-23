@@ -1,0 +1,150 @@
+﻿@page "/bookspace"
+@using BookStore.Models
+@using DataAccessLib
+@using Microsoft.AspNetCore.Mvc
+@using MySql
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _config
+@inject IDataAccess _data
+
+<PageTitle>Base List</PageTitle>
+
+@using BookStore
+@using MySql.Data.MySqlClient
+
+<p>List of Books</p>
+
+
+@if (availableBooks == null)
+{
+    <div class="spinner-grow" role="status">
+            <span class="sr-only"></span>
+    </div>}else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var a in availableBooks)
+        {
+                <tr>
+                    <td>@a.Idbook</td> 
+
+                    <td>@a.Name</td>
+
+                    <td>@a.Description</td> 
+
+                    <td>@a.Category</td> 
+
+                    <td>@a.Price</td> 
+             
+                    <td class="btn btn-primary btn-sm rounded-0" @onclick="()=>DeleteBook(a.Idbook)" ><i class="io io-x me-3">delete</i></td>
+                 
+                    <td class="btn btn-primary btn-sm rounded-0"  ><i class="fa fa-edit">edit</i></td>
+                </tr>
+        }
+        </tbody>
+    </table>
+ }
+    <section id="makebook" class="form">
+    @if (create)
+    {
+        <EditForm Model="@book" OnValidSubmit="Insert">
+            <DataAnnotationsValidator>
+
+            </DataAnnotationsValidator>
+                <div class="mb-4">
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" class="form-control" @bind-value="book.Name" placeholder="Book name"/>
+                </div>
+                <div class="mb-4">
+                    <label for="description">Description: </label>
+                    <input type="text" id="description" class="form-control" @bind-value="book.Description" placeholder="Description"/>
+                </div>
+                <div class="mb-4">
+                    <label for="category">Category: </label>
+                    <input type="text" id="category" class="form-control" @bind-value="book.Category" placeholder="Category"/>
+                </div>
+                <div class="mb-4">
+                    <label for="Price">Price: </label>
+                    <input type="text" id="price" class="form-control" @bind-value="book.Price" placeholder= "Price"/>
+                </div>
+            <div class="d-grid">
+                <button type ="submit">Submit</button>
+            </div><br />
+            <p>End of Page</p>
+        </EditForm>
+    }
+    </section>
+
+
+@code{
+    //Available books in database
+    List<Book> ? availableBooks ;
+
+    //List of books selected to be edited
+    List<Book> ? thisbook ;
+
+    //Load the intial Data
+    Book book = new Book();
+
+    //bool controlllers
+    bool edit = false;
+    bool create = true;
+    bool ErrorMessage = false;
+    int beenEdited;
+    //error message for delete
+    string dberrormessagefordelete = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "SELECT *FROM book";
+        availableBooks = await _data.LoadData<Book, dynamic>(sql, new {},
+       _config.GetConnectionString("DbConnection"));
+    }
+
+    private async Task Insert()
+    {
+        string sql = "insert into book(name, description, category, price) values(@name, @description, @category, @price)";
+        Book b = new Book
+            {
+                Name = book.Name,
+                Description = book.Description,
+                Category = book.Category,
+                Price = book.Price
+            };
+        await _data.SaveData(sql,b, _config.GetConnectionString("DbConnection"));
+        await OnInitializedAsync();
+    }
+
+    //Editing the details
+    private async Task DeleteBook(int idbook)
+    {
+        string sql = "DELETE FROM `products_db`.`book` WHERE idbook = @idbook";
+        bool DeleteErrorMessage = false;
+        try
+        {
+            await _data.SaveData(sql, new { idbook = @idbook }, _config.GetConnectionString("DbConnection"));
+            await OnInitializedAsync();
+        }catch(Exception ex)
+        {
+            DeleteErrorMessage = true;
+            dberrormessagefordelete = ex.ToString();
+        }
+    }
+    /*@private async async EditBook(int idbook)
+    {
+        edit = true;
+        string sql = "select *from book where idbook = @idbook";
+        thisbook = await _data.LoadData<Book, dynamic>(IDataAccess, new { idbook = idbook }, _config.GetConnectionString("DbConnection"));
+        beenEdited = idbook;
+    }*/
+}
