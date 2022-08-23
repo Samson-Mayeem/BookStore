@@ -1,0 +1,112 @@
+﻿@page "/bookspace"
+@using BookStore.Models
+@using DataAccessLib
+@using Microsoft.AspNetCore.Mvc
+@using MySql
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _config
+@inject IDataAccess _data
+
+<PageTitle>Base List</PageTitle>
+
+@using BookStore
+@using MySql.Data.MySqlClient
+
+<p>List of Books</p>
+
+
+@if (availableBooks == null)
+{
+    <div class="spinner-grow" role="status">
+            <span class="sr-only"></span>
+    </div>}else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var a in availableBooks)
+        {
+                <tr>
+                    <td>@a.Id</td> 
+                    <td>@a.Name</td>
+
+                    <td>@a.Descrition</td> 
+
+                    <td>@a.Category</td> 
+
+                    <td>@a.Price</td> 
+                    <td class="btn btn-primary btn-sm rounded-0"  ><i class="fa fa-edit">edit</i></td>
+                </tr>
+        }
+        </tbody>
+    </table>
+ }
+    @*<section id="makebook" class="form">
+        <EditForm Model="@book" OnValidSubmit="Insert">
+
+            <DataAnnotationsValidator>
+                <div class="mb-4">
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" class="form-control" @bind-value="book.Name" placeholder="Book name"/>
+                </div>
+                <div class="mb-4">
+                    <label for="description">Description: </label>
+                    <input type="text" id="description" class="form-control" @bind-value="book.Descrition" placeholder="Description"/>
+                </div>
+                <div class="mb-4">
+                    <label for="category">Category: </label>
+                    <input type="text" id="category" class="form-control" @bind-value="book.Category" placeholder="Category"/>
+                </div>
+                <div class="mb-4">
+                    <label for="Price">Price: </label>
+                    <input type="text" id="price" class="form-control" @bind-value="book.Price" placeholder= "Price"/>
+                </div>
+
+            </DataAnnotationsValidator>
+            <div class="d-grid">
+                <button type ="submit">Submit</button>
+            </div>
+        </EditForm>
+    </section>*@
+
+
+@code{
+    List<Book> availableBooks;
+    //Load the intial Data
+    Book book = new Book();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string sql = "SELECT *FROM book";
+        availableBooks = await _data.LoadData<Book, dynamic>(sql, new {},
+       _config.GetConnectionString("DbConnection"));
+    }
+
+    private async Task Insert()
+    {
+        // string sql = "insert into book(name, description, category, price) values(@name, @description, @category, @price)";
+
+
+        //await _data.SaveData(sql, new { }, _config.GetConnectionString("DbConnection"));
+       /* Book b = new Book
+            {
+                Name = book.Name,
+                Descrition = book.Descrition,
+                Category = book.Category,
+                Price = book.Price
+            };
+        await _data.SaveData(b);
+        availableBooks.Add(b);
+        book = new Book();*/
+    }
+
+}
