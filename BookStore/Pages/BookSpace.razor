@@ -80,9 +80,39 @@
             <div class="d-grid">
                 <button type ="submit">Submit</button>
             </div><br />
-            <p>End of Page</p>
+            <p><enter></enter>End Adding Section</p>
         </EditForm>
     }
+    </section>
+    <section>
+        @if (edit)
+        {
+        <EditForm Model="@book" OnValidSubmit="UpdateBook">
+            <DataAnnotationsValidator>
+
+            </DataAnnotationsValidator>
+                <div class="mb-4">
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" class="form-control" @bind-value="book.Name" placeholder="Book name"/>
+                </div>
+                <div class="mb-4">
+                    <label for="description">Description: </label>
+                    <input type="text" id="description" class="form-control" @bind-value="book.Description" placeholder="Description"/>
+                </div>
+                <div class="mb-4">
+                    <label for="category">Category: </label>
+                    <input type="text" id="category" class="form-control" @bind-value="book.Category" placeholder="Category"/>
+                </div>
+                <div class="mb-4">
+                    <label for="Price">Price: </label>
+                    <input type="text" id="price" class="form-control" @bind-value="book.Price" placeholder= "Price"/>
+                </div>
+            <div class="d-grid">
+                <button type ="submit">Update</button>
+            </div><br />
+            <p>End of Page</p>
+        </EditForm>
+        }
     </section>
 
 
@@ -140,11 +170,37 @@
             dberrormessagefordelete = ex.ToString();
         }
     }
-    /*@private async async EditBook(int idbook)
+
+    //Editing 
+    private async Task EditBook(int idbook)
     {
         edit = true;
         string sql = "select *from book where idbook = @idbook";
-        thisbook = await _data.LoadData<Book, dynamic>(IDataAccess, new { idbook = idbook }, _config.GetConnectionString("DbConnection"));
+        thisbook = await _data.LoadData<Book, dynamic>(sql, new{ idbook = idbook }, _config.GetConnectionString("DbConnection"));
         beenEdited = idbook;
-    }*/
+        book.Name = thisbook[0].Name;
+        book.Description = thisbook[0].Description;
+        book.Category = thisbook[0].Category;
+        book.Price = thisbook[0].Price;
+    }
+    //Update book
+    private async Task UpdateBook()
+    {
+        Book b = new Book
+            {
+                Name = book.Name,
+                Description = book.Description,
+                Category = book.Category,
+                Price = book.Price,
+                Idbook = beenEdited
+            };
+            string sql = "UPDATE `products_db`.`book` SET `idbook` = @idbook, `name` = @name, `description` = @description, `category` = @category, `price` = @price WHERE `idbook` = @idbook";
+
+          b = new Book();
+          book = new Book();
+          create = true;
+          edit = false;
+    }
+    
+    
 }
