@@ -38,6 +38,7 @@
                 <tr>
                     <td>@a.Idbook</td> 
 
+                    <td>@a.Id</td> 
                     <td>@a.Name</td>
 
                     <td>@a.Description</td> 
@@ -58,6 +59,7 @@
     @if (create)
     {
         <EditForm Model="@book" OnValidSubmit="Insert">
+
             <DataAnnotationsValidator>
 
             </DataAnnotationsValidator>
@@ -201,6 +203,6 @@
           create = true;
           edit = false;
     }
-    
+
     
 }
