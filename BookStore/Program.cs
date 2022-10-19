@@ -2,7 +2,6 @@ using BookStore.Models;
 using DataAccessLib;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MySql.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +12,6 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
 builder.Services.AddScoped<sessionstate>();
-
 
 var app = builder.Build();
 
