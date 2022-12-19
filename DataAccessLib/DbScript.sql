@@ -1,6 +1,6 @@
-#CREATE SCHEMA `products_db` ;
+ CREATE DATABASE "products_db";
 
-CREATE TABLE `products_db`.`products_tb` (
+CREATE TABLE "products_db"."products_tb" (
   `idproducts_tb` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `description` VARCHAR(45) NULL,
