@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore", "BookStore\BookStore.csproj", "{10686CC8-C9BC-459D-BB08-420AD648F23D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenSpace", "BookStore\OpenSpace.csproj", "{10686CC8-C9BC-459D-BB08-420AD648F23D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLib", "DataAccessLib\DataAccessLib.csproj", "{EC34D9C1-4813-4CD7-9B0F-C79AC10B741D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenSpaceDataAccessLib", "DataAccessLib\OpenSpaceDataAccessLib.csproj", "{EC34D9C1-4813-4CD7-9B0F-C79AC10B741D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
